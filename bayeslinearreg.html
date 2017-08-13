@@ -132,7 +132,7 @@ $(document).ready(function () {
 <h1>Funktionen für den Metropolis-Hastings Algorithmus</h1>
 <div id="log-likelihood-funktionen" class="section level2">
 <h2>Log-Likelihood Funktionen</h2>
-<p>Berechnet die logarithmierte Likelihood für das Lineare Modell und summiert über alle Beobachtungen - Matrixschreibweise wurde gewählt um Schleifen zu vermeiden:</p>
+<p>Diese berechnet die logarithmierte Likelihood für das Lineare Modell und summiert jene über alle Beobachtungen - Matrixschreibweise wurde gewählt um Schleifen zu vermeiden:</p>
 <pre class="r"><code>logLikelihood = function(X,y,betas,sd)
 {
   yHat = X%*%betas
@@ -143,7 +143,7 @@ $(document).ready(function () {
   
   return(sumLikelihoods)
 }</code></pre>
-<p>Berechnet logarithmierte ‘Likelihood’-Werte der Prior Verteilungen und summiert diese über alle Prior- verteilungen auf. Die Hyperparameter der Priorverteilungen können flexibel angepasst werden - ein einzelner Skalar für die Parameter der Beta-Priors wird dann für alle Beta-Priors verwendendet; alternativ können auch Prior-Parameter für jede Prior einzeln in Form eines Vektors eingegeben werden (siehe die eigentliche Funktion ‘metropolisBayesRegression’).</p>
+<p>Hier werden die logarithmierten ‘Likelihood’-Werte der Prior Verteilungen berechnet und über alle Prior- verteilungen aufsummiert. Die Hyperparameter der Priorverteilungen können flexibel angepasst werden - ein einzelner Skalar für die Parameter der Beta-Priors wird dann für alle Beta-Priors verwendendet; alternativ können auch Prior-Parameter für jede Prior einzeln in Form eines Vektors eingegeben werden (siehe die eigentliche Funktion ‘metropolisBayesRegression’).</p>
 <pre class="r"><code>logPriors = function(betas,sd, meanNormalPrior = 0, sdNormalPrior = 5, shapeInvGammaPrior = 1, scaleInvGamma = 1)
 {
   lenBetas = length(betas)
@@ -171,7 +171,7 @@ $(document).ready(function () {
 </div>
 <div id="posterior-density" class="section level2">
 <h2>Posterior Density</h2>
-<p>Summiert alle Likelihood-Funktionen zur Berechnung der (Log) Posterior-Density auf</p>
+<p>Die Funktion summiert hier alle Likelihood-Funktionen zur Berechnung der (Log) Posterior-Density auf</p>
 <pre class="r"><code>posterior &lt;- function(X, y, betas, sd, meanNormalPrior=0, sdNormalPrior=5, shapeInvGammaPrior=1,scaleInvGammaPrior=1){
   
   return (
@@ -182,7 +182,7 @@ $(document).ready(function () {
 </div>
 <div id="proposal-densities-hier-eigentlich-funktionen" class="section level2">
 <h2>Proposal Densities (hier eigentlich Funktionen)</h2>
-<p>Um möglichst flexibel mit verschiedenen Proposal-Densities experimentieren zu können, können diese in Form der unten programmierten Funktionen direkt als Argument an die eigentlich Regressions-Funktion eingegeben werden.</p>
+<p>Um möglichst flexibel mit verschiedenen Proposal-Densities experimentieren zu können, können diese in Form der unten programmierten Funktionen direkt als Argument an die eigentliche Regressions-Funktion eingegeben werden.</p>
 <div id="proposal-function-1" class="section level3">
 <h3>Proposal Function 1</h3>
 <p>Die Idee hinter proposalFunction1 ist die Simulierung eines klassichen RandomWalk-Prozesses mit Normalverteilung. Da der Varianz- (bzw. in R ja der Standardabweichungs-)parameter &gt; 0 sein muss und mit jeder Proposal-Standardabweichung &lt;=0 eine Realisation der Markov-Chain sofort verworfen werden würde (NaN-Werte in den Posterior-Densitites bekommen weiter unten den Dichtewert 0, damit der MH-Algorithmus unproblematisch weiter läuft), wird als Proposal-Density für die Standardabweichung eine trunkierte Normalverteilung mit 0 als Lower-Bound genutzt.</p>
