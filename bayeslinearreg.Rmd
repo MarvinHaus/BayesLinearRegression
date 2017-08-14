@@ -11,13 +11,13 @@ output:
 library(MCMCpack)
 library(truncnorm)
 ```
-# Kurze Einführung
-Das Thema unserer Arbeit ist die Programmierung eines Metropolis-Hastings Algorithmus zur simulatorischen Berechnung einer zweidimensionalen Normal-Inverse Gamma Posterior-Dichte. Da sich diese Dichte auch bei Bayesianischer Linearer Regression häufig wiederfindet, richten wir unser Programm direkt darauf aus, im Anschluss das genannte Regressionsverfahren in einer Funktion durchzuführen und mithilfe simulierter Daten das Verfahren zu überprüfen.
+# Kurze EinfÃ¼hrung
+Das Thema unserer Arbeit ist die Programmierung eines Metropolis-Hastings Algorithmus zur simulatorischen Berechnung einer zweidimensionalen Normal-Inverse Gamma Posterior-Dichte. Da sich diese Dichte auch bei Bayesianischer Linearer Regression hÃ¤ufig wiederfindet, richten wir unser Programm direkt darauf aus, im Anschluss das genannte Regressionsverfahren in einer Funktion durchzufÃ¼hren und mithilfe simulierter Daten das Verfahren zu Ã¼berprÃ¼fen.
 
-# Funktionen für den Metropolis-Hastings Algorithmus
+# Funktionen fÃ¼r den Metropolis-Hastings Algorithmus
 
 ## Log-Likelihood Funktionen
-Berechnet die logarithmierte Likelihood für das Lineare Modell und summiert über alle Beobachtungen - Matrixschreibweise wurde gewählt um Schleifen zu vermeiden:
+Berechnet die logarithmierte Likelihood fÃ¼r das Lineare Modell und summiert Ã¼ber alle Beobachtungen - Matrixschreibweise wurde gewÃ¤hlt um Schleifen zu vermeiden:
 
 ```{r loglikelihood}
 logLikelihood = function(X,y,betas,sd)
@@ -32,10 +32,10 @@ logLikelihood = function(X,y,betas,sd)
 }
 ```
 
-Berechnet logarithmierte 'Likelihood'-Werte der Prior Verteilungen und summiert diese über alle Prior-
-verteilungen auf. Die Hyperparameter der Priorverteilungen können flexibel angepasst werden - ein einzelner
-Skalar für die Parameter der Beta-Priors wird dann für alle Beta-Priors verwendendet; alternativ können auch
-Prior-Parameter für jede Prior einzeln in Form eines Vektors eingegeben werden (siehe die eigentliche Funktion 'metropolisBayesRegression').
+Berechnet logarithmierte 'Likelihood'-Werte der Prior Verteilungen und summiert diese Ã¼ber alle Prior-
+verteilungen auf. Die Hyperparameter der Priorverteilungen kÃ¶nnen flexibel angepasst werden - ein einzelner
+Skalar fÃ¼r die Parameter der Beta-Priors wird dann fÃ¼r alle Beta-Priors verwendendet; alternativ kÃ¶nnen auch
+Prior-Parameter fÃ¼r jede Prior einzeln in Form eines Vektors eingegeben werden (siehe die eigentliche Funktion 'metropolisBayesRegression').
 
 ```{r loglikePrior}
 logPriors = function(betas,sd, meanNormalPrior = 0, sdNormalPrior = 5, shapeInvGammaPrior = 1, scaleInvGamma = 1)
@@ -80,15 +80,15 @@ posterior <- function(X, y, betas, sd, meanNormalPrior=0, sdNormalPrior=5, shape
 
 ## Proposal Densities (hier eigentlich Funktionen)
 
-Um möglichst flexibel mit verschiedenen Proposal-Densities experimentieren zu können, können diese
+Um mÃ¶glichst flexibel mit verschiedenen Proposal-Densities experimentieren zu kÃ¶nnen, kÃ¶nnen diese
 in Form der unten programmierten Funktionen direkt als Argument an die eigentlich Regressions-Funktion
 eingegeben werden.
 
 ### Proposal Function 1
 Die Idee hinter proposalFunction1 ist die Simulierung eines klassichen RandomWalk-Prozesses mit Normalverteilung. Da der Varianz- (bzw. in R ja der Standardabweichungs-)parameter > 0 sein muss
 und mit jeder Proposal-Standardabweichung <=0 eine Realisation der Markov-Chain sofort verworfen
-werden würde (NaN-Werte in den Posterior-Densitites bekommen weiter unten den Dichtewert 0, damit der
-MH-Algorithmus unproblematisch weiter läuft), wird als Proposal-Density für die Standardabweichung eine
+werden wÃ¼rde (NaN-Werte in den Posterior-Densitites bekommen weiter unten den Dichtewert 0, damit der
+MH-Algorithmus unproblematisch weiter lÃ¤uft), wird als Proposal-Density fÃ¼r die Standardabweichung eine
 trunkierte Normalverteilung mit 0 als Lower-Bound genutzt.
 ```{r proposal function 1}
 
@@ -107,7 +107,7 @@ proposalFunction1 <- function(betas, sd, betaProposalSd = 0.5, sdProposalSd = 0.
 
 
 ### Proposal Function 2
-proposalFunction2 nutzt eine t-Verteilung für die Betas und eine log-Normalverteilung für die Proposal der Standardabweichung. Damit die t-Verteilung eine endliche Varianz besitzt, muss die Anzahl der Freiheitsgrade >2 sein - wir haben uns für df = 3 entschieden, um einen deutlichen Unterschied zur Normalverteilung zu gewährleisten.
+proposalFunction2 nutzt eine t-Verteilung fÃ¼r die Betas und eine log-Normalverteilung fÃ¼r die Proposal der Standardabweichung. Damit die t-Verteilung eine endliche Varianz besitzt, muss die Anzahl der Freiheitsgrade >2 sein - wir haben uns fÃ¼r df = 3 entschieden, um einen deutlichen Unterschied zur Normalverteilung zu gewÃ¤hrleisten.
 ```{r proposal function 2}
 proposalFunction2 <- function(betas, sd, betaProposalSd = 0.5, sdProposalSd = 0.5){
   
@@ -124,7 +124,7 @@ proposalFunction2 <- function(betas, sd, betaProposalSd = 0.5, sdProposalSd = 0.
 
 ### Proposal Function 3
 
-Die letzte Proposal Function arbeitet mit Gleichverteilungen. Um auch hier negative Proposals für die
+Die letzte Proposal Function arbeitet mit Gleichverteilungen. Um auch hier negative Proposals fÃ¼r die
 Standardabweichung zu vermeiden, wird die untere Grenze des entsprechenden RNGs bei 0 trunkiert. Die
 obere Grenze wird so festgelegt, dass in jedem Fall die aktuelle Standardabweichung den Erwartungswert
 der Gleichverteilung bildet.
@@ -152,23 +152,23 @@ proposalFunction3 <- function(betas, sd, betaProposalInterval = 0.5, sdProposalI
 
 Der eigentliche MH-Algorithmus. Es kann eine beliebige Anzahl an Features verwendet werden (in R allerdings ineffizient - auch da nicht parallelisierbar)
 
-Erklärung der Parameter:
+ErklÃ¤rung der Parameter:
 
 * **X**: Matrix der exogenen Variablen (wichtig ist, dass der Datentyp in R "matrix" und nicht "data.frame" ist, da sonst die Matrixoperationen fehlschlagen)
 * **y**: Vektor/Matrix der endogenen Variable
-* **startValuesBeta**: Startwerte für die Beta-Parameter im MH-Algorithmus
-* **startValueSd**: Startwerte für Standardabweichung
+* **startValuesBeta**: Startwerte fÃ¼r die Beta-Parameter im MH-Algorithmus
+* **startValueSd**: Startwerte fÃ¼r Standardabweichung
 * **nIterations**: Anzahl der Iterationen im MH-Algorithmus **nach** der Burn-In Phase
 * **nBurnIn**: Anzahl der Burn-In Iterationen
-* **meanNormalPrior**: Skalar **oder** Vektor der/des Erwartungswerte(s) der Beta-Prior(s) - wird lediglich ein Skalar übergeben, wird dieser für alle Beta-Priors verwendet
-* **sdNormalPrior**: Wie *meanNormalPrior* für die Standardabweichung der Beta-Prior
-* **shapeInvGamma**: Skalar für den Shape-Parameter der Inversen Gammaverteilung der Prior der Standardabweichung
+* **meanNormalPrior**: Skalar **oder** Vektor der/des Erwartungswerte(s) der Beta-Prior(s) - wird lediglich ein Skalar Ã¼bergeben, wird dieser fÃ¼r alle Beta-Priors verwendet
+* **sdNormalPrior**: Wie *meanNormalPrior* fÃ¼r die Standardabweichung der Beta-Prior
+* **shapeInvGamma**: Skalar fÃ¼r den Shape-Parameter der Inversen Gammaverteilung der Prior der Standardabweichung
 * **scaleInvGamma**: Scale-Parameter der Inversen Gammaverteilung.
 * **proposalFunction**: individuelle Proposal-Funktion (siehe entsprechenden Punkt weiter oben)
-* **betaProposalScaleParameter**: Skalenparameter der ProposalFunktion der Betas - nicht zwangsläufig die Varianz/bzw. Standardabweichung (abhängig von der Proposal-Verteilung)
+* **betaProposalScaleParameter**: Skalenparameter der ProposalFunktion der Betas - nicht zwangslÃ¤ufig die Varianz/bzw. Standardabweichung (abhÃ¤ngig von der Proposal-Verteilung)
 * **sdProposalScaleParameter**: Skalenparameter der ProposalFunktion der Standardabweichung
 
-Da die acceptance-rate im MH-Algorithmus vor allem von den gewählten Skalenparametern abhängt können hier entsprechende Anpassungen vorgenommen werden.
+Da die acceptance-rate im MH-Algorithmus vor allem von den gewÃ¤hlten Skalenparametern abhÃ¤ngt kÃ¶nnen hier entsprechende Anpassungen vorgenommen werden.
 
 ```{r metropolis Linear Bayes Regression}
 metropolisBayesRegression = function (X, y, startValuesBeta, startValueSd,
@@ -198,17 +198,17 @@ metropolisBayesRegression = function (X, y, startValuesBeta, startValueSd,
     
     proposalValues = proposalFunction(currentBetas, currentSd, betaProposalScaleParameter, sdProposalScaleParameter)
     
-    #damit die Proposal-Function nur ein mal benötigt wird, gibt sie alle Proposals gleichzeitig als Liste aus
+    #damit die Proposal-Function nur ein mal benÃ¶tigt wird, gibt sie alle Proposals gleichzeitig als Liste aus
     proposalBetas = proposalValues[[1]]
     proposalSd = proposalValues[[2]]
     
     currentPosterior = posterior(X, y, currentBetas, currentSd, meanNormalPrior, sdNormalPrior, shapeInvGammaPrior, scaleInvGammaPrior)
     proposalPosterior = posterior(X, y, proposalBetas, proposalSd, meanNormalPrior, sdNormalPrior, shapeInvGammaPrior, scaleInvGammaPrior)
 
-    #re-transformation des (Log-)Likelihood-Ratios um die Random-Acceptance durchzuführen
+    #re-transformation des (Log-)Likelihood-Ratios um die Random-Acceptance durchzufÃ¼hren
     likelihoodRatio = exp(proposalPosterior - currentPosterior)
     
-    #gerade bei unzulässigen Proposal-Werten für die Varianz bzw. Standardabweichung ist der Wert des Likelihood-Ratios 'NaN'. Damit hier keine Probleme im if-statement weiter unten entstehen, ersetzen wir hier den NaN-Wert mit 0, was zu einer sofortigen Rejection der Proposal-Werte führt. Im großen und Ganzen möchten wir aber versuchen, unzulässige Werte für unsere Parameter direkt zu vereiden, um nicht unnötig viele Iterationen zu verschwenden.
+    #gerade bei unzulÃ¤ssigen Proposal-Werten fÃ¼r die Varianz bzw. Standardabweichung ist der Wert des Likelihood-Ratios 'NaN'. Damit hier keine Probleme im if-statement weiter unten entstehen, ersetzen wir hier den NaN-Wert mit 0, was zu einer sofortigen Rejection der Proposal-Werte fÃ¼hrt. Im groÃŸen und Ganzen mÃ¶chten wir aber versuchen, unzulÃ¤ssige Werte fÃ¼r unsere Parameter direkt zu vereiden, um nicht unnÃ¶tig viele Iterationen zu verschwenden.
     if (is.nan(likelihoodRatio))
       {
         likelihoodRatio = 0
@@ -244,7 +244,7 @@ metropolisBayesRegression = function (X, y, startValuesBeta, startValueSd,
 
   meanSd = mean(markovChain[-(1:nBurnIn), lenBetas+1])
   
-  #eine extra-Spalte für die Nummer der Iteration erleichtert das Plotten mit ggplot
+  #eine extra-Spalte fÃ¼r die Nummer der Iteration erleichtert das Plotten mit ggplot
   markovChain$iter = seq(0,totalIterations)
 
   simulationResult = list(meanBetas, meanSd, markovChain[-(1:nBurnIn),],
@@ -260,10 +260,10 @@ metropolisBayesRegression = function (X, y, startValuesBeta, startValueSd,
 
 #Experimenteller Teil
 
-Im experimentellen Teil werden wir den oben vorgestellten Metropolis-Algorithmus zuerst auf einen künstlich erzeugten Datensatz anwenden, bei dem alle Parameter a priori bekannt sind. Dies ermöglicht es uns vor allem, die Ergebnisse unseres Programms auf Korrektheit zu überprüfen.
+Im experimentellen Teil werden wir den oben vorgestellten Metropolis-Algorithmus zuerst auf einen kÃ¼nstlich erzeugten Datensatz anwenden, bei dem alle Parameter a priori bekannt sind. Dies ermÃ¶glicht es uns vor allem, die Ergebnisse unseres Programms auf Korrektheit zu Ã¼berprÃ¼fen.
 
 
-## Generierung zufälliger Testdaten
+## Generierung zufÃ¤lliger Testdaten
 
 Da die Funktion 'metropolisBayesRegression' auf Regression in Matrix-Notation ausgelegt ist, werden die Testdaten entsprechend generiert.
 
@@ -281,7 +281,7 @@ y = X%*%c(beta0,beta1) + rnorm(sampleSize, 0, standardDeviation)
 
 ```
 
-Für ggplot werden X und y zu einem data.frame Objekt zusammengefasst:
+FÃ¼r ggplot werden X und y zu einem data.frame Objekt zusammengefasst:
 
 ```{r prepareForPlot}
 ggData = as.data.frame(cbind(y,X[,2]))
@@ -297,7 +297,7 @@ plotTestData
 ```
 
 ## Bestimmung der Prior-Parameter
-Um möglichst sinnvolle Werte für unsere Prior-Verteilungen festlegen zu können, teilen wir den künstlich erzeugten Datensatz zufällig in zwei Teile à 1/10 und 9/10 auf. Den kleineren Teil nutzen wir, um aus einer einfachen linearen Regression 'a-priori' Informationen über die Regressionsparameter zu gewinnen. Würden wir uns streng an das Bayes-Paradigma halten, müssten wir hier mit uninformativen Priors arbeiten - da der Fokus unserer Arbeit aber auf Normal-/Inverse Gamma Priors liegt, arbeiten wir an dieser Stelle noch mit klassischer Regression. 
+Um mÃ¶glichst sinnvolle Werte fÃ¼r unsere Prior-Verteilungen festlegen zu kÃ¶nnen, teilen wir den kÃ¼nstlich erzeugten Datensatz zufÃ¤llig in zwei Teile Ã  1/10 und 9/10 auf. Den kleineren Teil nutzen wir, um aus einer einfachen linearen Regression 'a-priori' Informationen Ã¼ber die Regressionsparameter zu gewinnen. WÃ¼rden wir uns streng an das Bayes-Paradigma halten, mÃ¼ssten wir hier mit uninformativen Priors arbeiten - da der Fokus unserer Arbeit aber auf Normal-/Inverse Gamma Priors liegt, arbeiten wir an dieser Stelle noch mit klassischer Regression. 
 
 ```{r aPrioriRegression}
 set.seed(3456)
@@ -307,7 +307,7 @@ priorDataPoints = sample(1:sampleSize, round(sampleSize/10))
 priorX = X[priorDataPoints,]
 priorY = y[priorDataPoints,]
 
-#hier werden die Datenpunkte für die eigentliche Bayes-Regression bestimmt
+#hier werden die Datenpunkte fÃ¼r die eigentliche Bayes-Regression bestimmt
 bayesX = X[-priorDataPoints,]
 bayesY = y[-priorDataPoints]
 
@@ -317,7 +317,7 @@ print(summary(priorRegression))
 
 ```
 
-Wir nehmen nun an, dass die oben errechneten Werte aus einer vorhergehenden Studie stammen und uns lediglich die Regressionsergebnisse vorliegen, nicht aber die einzelnen Daten (da wir ansonsten einfach die a priori Daten mit unseren vereinen und die Regression anhand der vereinigten Daten durchführen könnten, was informative Prior-Verteilungen wieder hinfällig machen würde)
+Wir nehmen nun an, dass die oben errechneten Werte aus einer vorhergehenden Studie stammen und uns lediglich die Regressionsergebnisse vorliegen, nicht aber die einzelnen Daten (da wir ansonsten einfach die a priori Daten mit unseren vereinen und die Regression anhand der vereinigten Daten durchfÃ¼hren kÃ¶nnten, was informative Prior-Verteilungen wieder hinfÃ¤llig machen wÃ¼rde)
 ```{r priorSetting}
 betaPriorMeans = priorRegression$coefficients
 betaPriorSDs = as.numeric(summary(priorRegression)[[4]][,2])
@@ -326,17 +326,17 @@ sdPriorExpectation = summary(priorRegression)[[6]]
 
 ```
 
-Die Prior Parameter der Betas können wir direkt aus den Ergebnissen der Regression übernehmen. Um die Inverse Gamma Prior für die Standardabweichung vollständig spezifizieren zu können, benötigen wir Shape- und Scaleparameter Alpha und Beta. Um diese zu bestimmen, betrachten wir Erwartungswert und Varianz der Inversen Gammaverteilung: 
+Die Prior Parameter der Betas kÃ¶nnen wir direkt aus den Ergebnissen der Regression Ã¼bernehmen. Um die Inverse Gamma Prior fÃ¼r die Standardabweichung vollstÃ¤ndig spezifizieren zu kÃ¶nnen, benÃ¶tigen wir Shape- und Scaleparameter Alpha und Beta. Um diese zu bestimmen, betrachten wir Erwartungswert und Varianz der Inversen Gammaverteilung: 
 $$\mathbb{E}_{InvGamma}(\alpha, \beta)=\tfrac{\beta}{\alpha-1} \quad \forall \alpha>1$$
 sowie
 $$\mathbb{Var}_{InvGamma}(\alpha, \beta)=\tfrac{\beta^2}{(\alpha-1)^2(\alpha-2)} \quad \forall \alpha>2$$
 
-Als Erwartungswert für die Prior Inverse Gammmaverteilung wählen wir aufgrund des relativ hohen Gütemaßes in der "Prior-Regression" auch die geschätzte Standardabweichung ebendieser Regression. Da wir außerdem aufgrund des hohen Gütemaßes davon ausgehen können, dass die geschätzte Standardabweichung relativ nah bei der tatsächlichen Standardabweichung liegt (was sich bei Blick auf die zuvor definierte, wahre Standardabweichung auch bestätig), sollte sich dies auch in einer relativ geringen Varianz der Prior Inverse Gamma wiederspiegeln. Damit diese Varianz existiert, muss der Shape-Parameter Alpha wiederum größer als **2** sein. Damit außerdem die Varianz nicht zu groß wird, sollten Shape- und Skalenparameter nicht zu weit auseinander liegen, bzw. aufgrund der Potenzen im besten Fall beide relativ klein sein - hier legen wir diese auf **3.5** fest, um eine gewisse Sicherheit bezüglich der tatsächlichen Standardabweichung auszudrücken. Daraus ergeben sich dementsprechend folgende Bedingungen für die Parameter der Inversen Gamma Prior:
+Als Erwartungswert fÃ¼r die Prior Inverse Gammmaverteilung wÃ¤hlen wir aufgrund des relativ hohen GÃ¼temaÃŸes in der "Prior-Regression" auch die geschÃ¤tzte Standardabweichung ebendieser Regression. Da wir auÃŸerdem aufgrund des hohen GÃ¼temaÃŸes davon ausgehen kÃ¶nnen, dass die geschÃ¤tzte Standardabweichung relativ nah bei der tatsÃ¤chlichen Standardabweichung liegt (was sich bei Blick auf die zuvor definierte, wahre Standardabweichung auch bestÃ¤tig), sollte sich dies auch in einer relativ geringen Varianz der Prior Inverse Gamma wiederspiegeln. Damit diese Varianz existiert, muss der Shape-Parameter Alpha wiederum grÃ¶ÃŸer als **2** sein. Damit auÃŸerdem die Varianz nicht zu groÃŸ wird, sollten Shape- und Skalenparameter nicht zu weit auseinander liegen, bzw. aufgrund der Potenzen im besten Fall beide relativ klein sein - hier legen wir diese auf **3.5** fest, um eine gewisse Sicherheit bezÃ¼glich der tatsÃ¤chlichen Standardabweichung auszudrÃ¼cken. Daraus ergeben sich dementsprechend folgende Bedingungen fÃ¼r die Parameter der Inversen Gamma Prior:
 $$\tfrac{\beta}{\alpha-1}\overset{!}{=}\hat{SD}_{'PriorRegression'}$$
 $$\tfrac{\beta^2}{(\alpha-1)^2(\alpha-2)}\overset{!}{=}3.5^2$$
 sowie die Nebenbedingung:
 $$\alpha\overset{!}{>}2$$
-(zusätzlich zu der allgemeinen Voraussetzung, dass Shape- und Scaleparameter einer Inversen Gammaverteilung größer als 0 sein müssen, was aber unter den o.g. Bedingungen in jedem Fall gegeben ist)
+(zusÃ¤tzlich zu der allgemeinen Voraussetzung, dass Shape- und Scaleparameter einer Inversen Gammaverteilung grÃ¶ÃŸer als 0 sein mÃ¼ssen, was aber unter den o.g. Bedingungen in jedem Fall gegeben ist)
 
 Damit ergeben sich die beiden Parameter der Inverse Gammaverteilung zu:
 $$\alpha=(\tfrac{\hat{SD}_{'PriorRegression'}}{3.5})^2+2 \quad (>2)$$
@@ -354,8 +354,8 @@ print(sqrt(betaPrior^2/((alphaPrior-1)^2*(alphaPrior-2))))
 ```
 
 ## Bestimmung der Startwerte
-Nachdem wir die Parameter für die Prior-Verteilungen festgelegt haben, können wir jetzt die eigentliche Regression durchführen. Da es im Grunde unendlich viele Möglichkeiten gibt, die Ausgangsverteilungen und Hyperparameter für Prior- und Proposalfunktionen zu bestimmen, beschränken wir uns hier auf die oben vorgestellten Proposal-Funktionen, sowie die gerade definierten Parameter für die Prior-Verteilungen.
-Als Startwerte werden wir jeweils drei verschiedene Startmöglichkeiten pro Proposal-Funktionen verwenden, eine davon mit Startwerten nahe der wahren Werte, eine mit Startwerten für die Betas, die weit entfernt von ihren waren Werten liegen, sowie Startwerte, bei denen alle Werte weit entfernt von ihren wahren Werten liegen. Die Skalenparameter der Proposal-Densities haben wir durch Trial&Error so angepasst, dass die Acceptance-Rate von Proposal Function 1 bei Startwerten **nahe der wahren Parameter** in etwa den von Gelman für optimal erklärten Wert von 0.234 erreicht. Für alle anderen Proposal Funktionen werden dieselben  Werte für die Skalenparameter verwendet, um einen Vergleich zwischen den Proposal Densities zu erleichtern.
+Nachdem wir die Parameter fÃ¼r die Prior-Verteilungen festgelegt haben, kÃ¶nnen wir jetzt die eigentliche Regression durchfÃ¼hren. Da es im Grunde unendlich viele MÃ¶glichkeiten gibt, die Ausgangsverteilungen und Hyperparameter fÃ¼r Prior- und Proposalfunktionen zu bestimmen, beschrÃ¤nken wir uns hier auf die oben vorgestellten Proposal-Funktionen, sowie die gerade definierten Parameter fÃ¼r die Prior-Verteilungen.
+Als Startwerte werden wir jeweils drei verschiedene StartmÃ¶glichkeiten pro Proposal-Funktionen verwenden, eine davon mit Startwerten nahe der wahren Werte, eine mit Startwerten fÃ¼r die Betas, die weit entfernt von ihren waren Werten liegen, sowie Startwerte, bei denen alle Werte weit entfernt von ihren wahren Werten liegen. Die Skalenparameter der Proposal-Densities haben wir durch Trial&Error so angepasst, dass die Acceptance-Rate von Proposal Function 1 bei Startwerten **nahe der wahren Parameter** in etwa den von Gelman fÃ¼r optimal erklÃ¤rten Wert von 0.234 erreicht. FÃ¼r alle anderen Proposal Funktionen werden dieselben  Werte fÃ¼r die Skalenparameter verwendet, um einen Vergleich zwischen den Proposal Densities zu erleichtern.
 
 
 
@@ -371,7 +371,7 @@ startValSd3 = 15
 ```
 
 
-## Durchführung der Regression
+## DurchfÃ¼hrung der Regression
 
 ### Proposal Function 1
 ```{r seed1}
@@ -438,21 +438,21 @@ print(bayRegProp3start3$acceptanceRate)
 ```
 
 
-Nach Durchführung der Regression mit Hilfe des Metropolis-Algorithmus sollen jetzt die Ergebnisse analysiert werden.
+Nach DurchfÃ¼hrung der Regression mit Hilfe des Metropolis-Algorithmus sollen jetzt die Ergebnisse analysiert werden.
 
 ### Vergleich der unterschiedlichen Proposal-Funktionen
 
-Für Proposal-Function 2 liegt die Acceptance-Rate deutlich unter der von Proposal Function 1 - bzw. es fand keine Acceptance über die gesamt Markov-Kette erkennbar. Dies ist damit begründbar, dass die Varianzen der entsprechenden Vorschlagsverteilungen ([skalierte] Student-t und log-Normal) bei gleichen Skalenparametern höhere Wahrscheinlichkeiten für extremere Werte haben. Dies führt dementsprechend zu höherer Wahrscheinlichkeit, bei bereits "guten" Parameterwerten in der Markov-Chain, den Bereich der Parameterwerte mit hohen Likelihoods sprunghaft wieder zu verlassen und damit eine Rejetion der Proposal-Werte zu 
-Um also eine angemessene Acceptance-Rate zu erzielen, müssten wir die Skalenparameter deutlich reduzieren, was wir hier aber auslassen möchten.  
-Im Gegensatz dazu ist die Acceptance-Rate bei Gleichverteilungen mit gleichem Skalenparameter (**hier allerdings nicht mit der Standardabweichung zu verwechseln**) deutlich höher als bei (trunkierter) Normalverteilung. Da die Wertebereiche bei den Gleichverteilungen abhängig von den Skalenparametern sind und diese hier relativ klein gehalten sind, sind Sprünge aus dem Parameterbereich mit hohen Likelihood-Werten deutlich unwahrscheinlicher als bei Normalverteilungen, deren Träger sich ja über alle reellen, bzw. alle positiven reellen Zahlen erstreckt.  
+FÃ¼r Proposal-Function 2 liegt die Acceptance-Rate deutlich unter der von Proposal Function 1 - bzw. ist keine Acceptance Ã¼ber die gesamt Markov-Kette erkennbar. Dies ist damit begrÃ¼ndbar, dass die Varianzen der entsprechenden Vorschlagsverteilungen ([skalierte] Student-t und log-Normal) bei gleichen Skalenparametern hÃ¶here Wahrscheinlichkeiten fÃ¼r extremere Werte haben. Dies fÃ¼hrt dementsprechend zu hÃ¶herer Wahrscheinlichkeit, bei bereits "guten" Parameterwerten in der Markov-Chain, den Bereich der Parameterwerte mit hohen Likelihoods sprunghaft wieder zu verlassen und damit eine Rejection der Proposal-Werte zu vermeiden. 
+Um also eine angemessene Acceptance-Rate zu erzielen, mÃ¼ssten wir die Skalenparameter deutlich reduzieren, was wir hier aber auslassen mÃ¶chten.  
+Im Gegensatz dazu ist die Acceptance-Rate bei Gleichverteilungen mit gleichem Skalenparameter (**hier allerdings nicht mit der Standardabweichung zu verwechseln**) deutlich hÃ¶her als bei (trunkierter) Normalverteilung. Da die Wertebereiche bei den Gleichverteilungen abhÃ¤ngig von den Skalenparametern sind und diese hier relativ klein gehalten sind, sind SprÃ¼nge aus dem Parameterbereich mit hohen Likelihood-Werten deutlich unwahrscheinlicher als bei Normalverteilungen, deren TrÃ¤ger sich ja Ã¼ber alle reellen, bzw. alle positiven reellen Zahlen erstreckt.  
 
 ### Analyse der Markov Kette
-Zum Abschluss widmen wir uns der eigentlichen Analyse der Likelihood, vor allem hinsichtlich Konvergenz und Parameterschätzung. Da die Analysen für alle Proposal-Funktionen ähnlich ablaufen würde (mit Ausnahme von Proposal-Funktion 2, wo wir ja in diesem Experiment kein verwertbares Ergebnis erzielt haben), beschränken wir diese Analyse auf Proposal-Funktion 1 mit jeweils drei Startparameter-Tupeln (beta0, beta1, Standardabweichung)  
+Zum Abschluss widmen wir uns der eigentlichen Analyse der Likelihood, vor allem hinsichtlich Konvergenz und ParameterschÃ¤tzung. Da die Analysen fÃ¼r alle Proposal-Funktionen Ã¤hnlich ablaufen wÃ¼rde (mit Ausnahme von Proposal-Funktion 2, wo wir ja in diesem Experiment kein verwertbares Ergebnis erzielt haben), beschrÃ¤nken wir diese Analyse auf Proposal-Funktion 1 mit jeweils drei Startparameter-Tupeln (beta0, beta1, Standardabweichung)  
    
-Für die gesamte Markov-Kette, also inklusive BurnIn-Phase, ergibt sich für die drei Start-Werte folgendes Bild:
+FÃ¼r die gesamte Markov-Kette, also inklusive BurnIn-Phase, ergibt sich fÃ¼r die drei Start-Werte folgendes Bild:
 
 ```{r multiplot, echo=FALSE}
-#Funktion für multiplot - übernommen von http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/
+#Funktion fÃ¼r multiplot - Ã¼bernommen von http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   library(grid)
 
@@ -498,7 +498,7 @@ mc1Convp3 = ggplot(bayRegProp1start1$wholeChain, aes(x=iter, y=SD)) + geom_line(
 multiplot(mc1Convp1, mc1Convp2, mc1Convp3)
 ```
 
-Für beta0 wird die Konvergenz sehr früh erreicht. Auch für die anderen beiden Parameter ist eine schnelle Konvergenz festzustellen - einzig sehr kurz nach Beginn der BurnIn-Phase sind starke Ausschläge zu erkennen. Ansonsten haben - mit Ausnahme der Standardabweichung um Iteration 9000 - die Markov-Ketten einen erkennbaren Konvergenzverlauf.
+FÃ¼r beta0 wird die Konvergenz sehr frÃ¼h erreicht. Auch fÃ¼r die anderen beiden Parameter ist eine schnelle Konvergenz festzustellen - einzig sehr kurz nach Beginn der BurnIn-Phase sind starke AusschlÃ¤ge zu erkennen. Ansonsten haben - mit Ausnahme der Standardabweichung um Iteration 9000 - die Markov-Ketten einen erkennbaren Konvergenzverlauf.
 
 ### Beta-Startwerte weiter von den wahren Parametern entfernt
 
@@ -513,7 +513,7 @@ mc2Convp3 = ggplot(bayRegProp1start2$wholeChain, aes(x=iter, y=SD)) + geom_line(
 multiplot(mc2Convp1, mc2Convp2, mc2Convp3)
 ```
 
-Wie zu erwarten benötigt die Markov-Kette zu Beginn der Burn-In Phase erkennbar länger, um Konvergenz zu erreichen. Auffällig ist, dass auch die Standardabweichung trotz Startwert nahe des wahren Wertes in etwa so lange wie die anderen Parameter benötigt, bis sich erkennbare Konvergenz einstellt. Eine mögliche Erklärung hierfür könnte sein, dass "unpassendere" Werte der Standardabweichung für bessere Posterior Likelihood-Werte bei ebenfalls weiter entfernten Beta-Parametern sorgt.
+Wie zu erwarten benÃ¶tigt die Markov-Kette zu Beginn der Burn-In Phase erkennbar lÃ¤nger, um Konvergenz zu erreichen. AuffÃ¤llig ist, dass auch die Standardabweichung trotz Startwert nahe des wahren Wertes in etwa so lange wie die anderen Parameter benÃ¶tigt, bis sich erkennbare Konvergenz einstellt. Eine mÃ¶gliche ErklÃ¤rung hierfÃ¼r kÃ¶nnte sein, dass "unpassendere" Werte der Standardabweichung fÃ¼r bessere Posterior Likelihood-Werte bei ebenfalls weiter entfernten Beta-Parametern sorgt.
 
 ### Alle Startwerte weiter vom wahren Wert entfernt
 
@@ -528,11 +528,11 @@ mc3Convp3 = ggplot(bayRegProp1start3$wholeChain, aes(x=iter, y=SD)) + geom_line(
 multiplot(mc3Convp1, mc3Convp2, mc3Convp3)
 ```
 
-Auch hier erreicht die Markov-Kette die Konvergenz trotz anfangs relativ weit von den wahren Parameterwerten entfernten Startwerten. Da mit allen drei Startwerten ein ähnlicher Konvergenzzustand hinsichtlich der wahren Parameterwerte erreicht wird, beschränken wir die weitere Analyse auf den Fall von Startwerten nahe der wahren Parameterwerte
+Auch hier erreicht die Markov-Kette die Konvergenz trotz anfangs relativ weit von den wahren Parameterwerten entfernten Startwerten. Da mit allen drei Startwerten ein Ã¤hnlicher Konvergenzzustand hinsichtlich der wahren Parameterwerte erreicht wird, beschrÃ¤nken wir die weitere Analyse auf den Fall von Startwerten nahe der wahren Parameterwerte
 
 ## ACF der Markov-Ketten nach BurnIn-Phase
 Nun wollen wir nachvollziehen, wie stark die Autokorrleation zwischen den Iterationen der Markov-Kette 
-ist. Wir beschränken uns aus ACF-Plots.
+ist. Wir beschrÃ¤nken uns aus ACF-Plots.
 
 ```{r ACFs, echo = FALSE}
 ac1 = as.data.frame(cbind(acf(bayRegProp1start1$chainNoBurnIn[,1], plot = FALSE)$lag,
@@ -562,10 +562,10 @@ acfPlot3 = ggplot(data = ac3, mapping = aes(x = lag, y = acf)) +
 multiplot(acfPlot1, acfPlot2, acfPlot3)
 ```
 
-Für alle drei Parameter ist eine starke Autokorrelationzu verzeichnen, wünschenswert wäre allerdings eine möglichst geringe Autokorrelation. Um dies zu erreichen, könnten wir beispielsweise mit Rejection-Sampling arbeiten und nur jede k-te, nicht-verworfene Iteration akzeptieren, worauf wir an dieser Stelle allerdings verzichten.
+FÃ¼r alle drei Parameter ist eine starke Autokorrelationzu verzeichnen, wÃ¼nschenswert wÃ¤re allerdings eine mÃ¶glichst geringe Autokorrelation. Um dies zu erreichen, kÃ¶nnten wir beispielsweise mit Rejection-Sampling arbeiten und nur jede k-te nicht-verworfene Iteration akzeptieren, worauf wir an dieser Stelle allerdings verzichten.
 
 ### Dichte-Plots der Parameter
-Zuletzt plotten wir die Kerndichtechätzungen der drei Parameter. Dies ermöglicht uns einen besseren Einblick in die Verteilung der einzelnen Parameter.
+Zuletzt plotten wir die KerndichtechÃ¤tzungen der drei Parameter. Dies ermÃ¶glicht uns einen besseren Einblick in die Verteilung der einzelnen Parameter.
 
 ```{r kde}
 kd1 = ggplot(bayRegProp1start1$chainNoBurnIn, aes(beta0)) + geom_density(color = 1, fill = 1, alpha = 0.1) + geom_vline(xintercept = beta0, color = 4) + ggtitle("KDE beta0") + geom_vline(xintercept = mean(bayRegProp1start1$chainNoBurnIn[,1]), color = 6)
@@ -579,10 +579,10 @@ multiplot(kd1, kd2, kd3)
 
 ```
 
-Offensichtlich überschätzt der Bayes-Schätzer (Mittelwert der Markov-Kette, violette Linie) für beta0 den wahren Parameter (blaue Linie) und unterschätzt den wahren Parameter für beta1. Im Fall der Varianz trifft der Bayes-Schätzer den wahren Wert sehr gut. Die Abweichungen könnten im vermutlich durch höhere Varianz in den Prior-Verteilungen der Beta-Parameter reduziert werden, was allderdings nicht mehr dem eigentlichen Bayes-Paradigma der Einbindung von a-priori Information entsprechen würde. Nichtsdestotrotz befinden sich die wahren Parameter in einem angemessenen Dichtebereich der Posterior Randdichteverteilungen.
+Offensichtlich Ã¼berschÃ¤tzt der Bayes-SchÃ¤tzer (Mittelwert der Markov-Kette, violette Linie) fÃ¼r beta0 den wahren Parameter (blaue Linie) und unterschÃ¤tzt den wahren Parameter fÃ¼r beta1. Im Fall der Varianz trifft der Bayes-SchÃ¤tzer den wahren Wert sehr gut. Die Abweichungen kÃ¶nnten vermutlich durch hÃ¶here Varianz in den Prior-Verteilungen der Beta-Parameter reduziert werden, was allderdings nicht mehr dem eigentlichen Bayes-Paradigma der Einbindung von a-priori Information entsprechen wÃ¼rde. Dennoch befinden sich die wahren Parameter in einem angemessenen Dichtebereich der Posterior Randdichteverteilungen.
 
 #Schlussbemerkung
-Im Verlauf unserer Arbeit haben wir eine R-Funktion zur Linearen Bayes-Regression mithilfe des Metropolis-Algorithmus erstellt, die wir dann nach Ermittlung geeigneter Parameter für die Normal-Inversegamma Priors auf einen synthetisch erstellten Datensatz angewandt haben. Die Acceptance-Rate ist dabei als stark abhängig von der Wahl passender Proposal-Densities, bzw. geeigneter Skalenparameter ebendieser aufgefallen. Hinsichtlich des Konvergenzverhaltens haben wir eine rasche Konvergenz festgestellt.  
-Die Parameterschätzung selbst erzielte gute Ergebnisse, die besonders für die Standardabweichung nahe am wahren Wert lagen.  
+Im Verlauf unserer Arbeit haben wir eine R-Funktion zur Linearen Bayes-Regression mithilfe des Metropolis-Algorithmus erstellt, die wir dann nach Ermittlung geeigneter Parameter fÃ¼r die Normal-Inversegamma Priors auf einen synthetisch erstellten Datensatz angewandt haben. Die Acceptance-Rate ist dabei als stark abhÃ¤ngig von der Wahl passender Proposal-Densities, bzw. geeigneter Skalenparameter ebendieser, aufgefallen. Hinsichtlich des Konvergenzverhaltens haben wir eine rasche Konvergenz festgestellt.  
+Die ParameterschÃ¤tzung selbst erzielte gute Ergebnisse, die besonders fÃ¼r die Standardabweichung nahe am wahren Wert lagen.  
   
 Es hat sich gezeigt, dass Bayesianische Methoden eine potente Erweiterung der Methoden der klassischen Statistik darstellen, die gerade in Zeiten von Big Data und Machine Learning beispielsweise in Form von Gaussian Processes einen hohen Stellenwert besitzen und in Zukunft wohl auch weiterhin besitzen werden.
